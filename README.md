@@ -14,3 +14,5 @@ PCAP experiments
 ## TODOs
 * Capture from fritz box (non-ethernet, dsl, ppp, ...)
 * Try to implement zero-http as layer 2 packet generator (maybe too difficult to implement tcp)
+* What is the difference between flow, meta, and content data?
+* Search and read RFCs
