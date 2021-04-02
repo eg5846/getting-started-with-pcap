@@ -2,4 +2,4 @@
 PCAP experiments
 
 ## Create capturing content
-* See: [a relative link](zero-httpd/README.md)
+* See: [zero-httpd](zero-httpd)
