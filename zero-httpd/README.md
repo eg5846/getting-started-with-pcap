@@ -28,4 +28,7 @@ $ ls -lha /tmp/test.dat
 
 # Capture request and response with tshark (run as root)
 # tshark -i lo -f "port 8888" -F pcap -w /tmp/test.pcap
+
+# Small response (default: 128 B) results in 10 captured ethernet frames
+# Large response (query param mb set to 10) results in ~175 captured ethernet frames (on lo ethernet frame length is max. 65549?)
 ```
