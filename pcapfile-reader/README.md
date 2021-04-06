@@ -1,4 +1,4 @@
-# pcap-reader
+# pcapfile-reader
 
 ## References
 * https://github.com/google/gopacket
@@ -12,24 +12,24 @@
 $ sudo apt-get install libpcap-dev
 ```
 
-## Build pcap-reader
+## Build pcapfile-reader
 ```
 go build
 ```
 
-## Run pcap-reader
+## Run pcapfile-reader
 ```
 # Usage
 $ ./pcap-reader -h
-Usage of ./pcap-reader:
+Usage of ./pcapfile-reader:
   -i string
     	Path of PCAP input file
 
-$ ./pcap-reader -i ../contrib/small_lo.pcap
+$ ./pcapfile-reader -i ../contrib/small_lo.pcap
 ```
 
 ## TODOs
-* Is it possible to check order of ethernet frame sequence?
+* Is it possible to check order of ethernet frame sequence? Seems to be unpossible (no sequence number in header).
 
 ## Vendor golang dependencies (with go mod)
 See: https://golang.org/ref/mod#vendoring
@@ -61,7 +61,7 @@ The commands are:
 Use "go help mod <command>" for more information about a command.
 
 $ go mod init
-go: creating new go.mod: module github.com/eg5846/getting-started-with-pcap/pcap-reader
+go: creating new go.mod: module github.com/eg5846/getting-started-with-pcap/pcapfile-reader
 
 # Add some *.go files with includes
 

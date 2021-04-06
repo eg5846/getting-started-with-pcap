@@ -5,7 +5,7 @@ PCAP experiments
 * See: [zero-httpd](zero-httpd)
 
 ## Read PCAPs
-* See [pcap-reader](pcap-reader)
+* See [pcapfile-reader](pcapfile-reader)
 
 ## Create PCAPs with real content
 * See: [fritzdump ](fritzdump)
