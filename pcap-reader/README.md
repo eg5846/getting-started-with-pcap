@@ -24,6 +24,8 @@ $ ./pcap-reader -h
 Usage of ./pcap-reader:
   -i string
     	Path of PCAP input file
+
+$ ./pcap-reader -i ../contrib/small_lo.pcap
 ```
 
 ## TODOs
