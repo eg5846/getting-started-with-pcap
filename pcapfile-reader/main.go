@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/google/gopacket"
+	_ "github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
 )
 
