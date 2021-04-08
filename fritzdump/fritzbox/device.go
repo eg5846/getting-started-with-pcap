@@ -1,6 +1,7 @@
 package fritzbox
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -41,15 +42,21 @@ func (d *device) Authenticate() error {
 	return nil
 }
 
-func (d *device) StartCapturing() (io.ReadCloser, error) {
+func (d *device) StartCapturing(ctx context.Context) (io.ReadCloser, error) {
 	pathParams := fmt.Sprintf("cgi-bin/capture_notimeout?ifaceorminor=%s&snaplen=&capture=Start&sid=%s", d.iface, d.sid)
 	path := path.Join(d.url.Path, pathParams)
 	uri := fmt.Sprintf("%s://%s/%s", d.url.Scheme, d.url.Host, path)
 
-	res, err := http.Get(uri)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
 	}
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
 	return res.Body, nil
 }
 

@@ -37,6 +37,3 @@ Usage of ./fritzdump:
 
 $ ./fritzdump -p 123fritz -i 2-1
 ```
-
-## TODOs
-* Trap SIGTERM (Ctrl-C)

@@ -1,10 +1,12 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"io"
 	"log"
 	"os"
+	"os/signal"
 
 	"github.com/eg5846/getting-started-with-pcap/fritzdump/fritzbox"
 )
@@ -31,6 +33,23 @@ func init() {
 }
 
 func main() {
+	// Trap Ctrl+C and call cancel on the context
+	ctx, cancel := context.WithCancel(context.Background())
+	interruptChan := make(chan os.Signal, 1)
+	signal.Notify(interruptChan, os.Interrupt)
+	defer func() {
+		signal.Stop(interruptChan)
+		cancel()
+	}()
+	go func() {
+		select {
+		case <-interruptChan:
+			log.Print("Signal interrupt received")
+			cancel()
+		case <-ctx.Done():
+		}
+	}()
+
 	log.Printf("Creating device for %s ...", opts.url)
 	device, err := fritzbox.NewDevice(opts.url, opts.username, opts.password, opts.iface)
 	if err != nil {
@@ -43,7 +62,7 @@ func main() {
 	}
 
 	log.Printf("Capturing from interface %s ...", device.Interface())
-	body, err := device.StartCapturing()
+	body, err := device.StartCapturing(ctx)
 	if err != nil {
 		log.Fatalf("Capturing from interface %s failed: %s", device.Interface(), err)
 	}
@@ -57,8 +76,9 @@ func main() {
 	defer f.Close()
 
 	n, err := io.Copy(f, body)
-	if err != nil {
+	if err != nil && err != context.Canceled {
 		log.Fatalf("Dumping to %s failed: %s", opts.outFile, err)
 	}
+
 	log.Printf("%d Bytes dumped to %s", n, opts.outFile)
 }
