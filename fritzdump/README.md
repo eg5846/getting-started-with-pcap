@@ -44,9 +44,9 @@ Open browser's developer tools and inspect `Start` buttons value.
 
 |Interface|Description|
 |---------|-----------|
-|2-0|WAN, but not found with inspect, captures external and internal IPs, but no ethernet layer|
-|2-1|Internetverbindung?|
-|3-17|Schnittstelle 0 ('internet')?|
+|2-0|WAN, but not found with inspect, captures public and internal IPs, but no ethernet layer (frame encapsulation type: Raw IP (7))|
+|2-1|Internetverbindung, captures only public IPs, seems to contain ethernet layer|
+|3-17|Schnittstelle 0 ('internet'), captures only public IPs, seems to contain ethernet layer|
 |3-18|Schnittstelle 1 ('mstv')?|
 |3-0|Routing-Schnittstelle?|
 |1-eoam|eoam?|
