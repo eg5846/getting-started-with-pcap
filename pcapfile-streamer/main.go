@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/google/gopacket/layers"
 	"github.com/mdlayher/ethernet"
 
 	"github.com/eg5846/getting-started-with-pcap/pcapfile-streamer/ethernet/stream"
@@ -57,19 +58,19 @@ func main() {
 	defer reader.Close()
 
 	for packet := range reader.Packets() {
-		payload, networkLayerType, err := repack.ExtractLinkLayerPayload(packet)
+		ipContent, ipLayerType, err := repack.ExtractLinkLayerPayload(packet)
 		if err != nil {
-			log.Printf("[%s] Extracting link layer payload from packet failed: %s", opts.pcapInFile, err)
+			log.Printf("[%s] Parsing IP content from packet failed: %s", opts.pcapInFile, err)
 			continue
 		}
 
-		md5sum := fmt.Sprintf("%x", md5.Sum(payload))
-		log.Printf("[%s] Link layer payload md5sum: %s, network layer type: %s (%d), size: %d Bytes", opts.pcapInFile, md5sum, networkLayerType, networkLayerType, len(payload))
-		//log.Printf("[%s] %#v", opts.pcapInFile, payload)
+		md5sum := fmt.Sprintf("%x", md5.Sum(ipContent))
+		log.Printf("[%s] IP content md5sum: %s, IP layer type: %s (%d), size: %d Bytes", opts.pcapInFile, md5sum, ipLayerType, ipLayerType, len(ipContent))
+		//log.Printf("[%s] %#v", opts.pcapInFile, ipContent)
 
-		switch networkLayerType {
-		case 20: // IPv4
-			ethernetPacket, err := repack.EncodeEthernetIPv4Packet(destination, source, vlan, payload)
+		switch ipLayerType {
+		case layers.LayerTypeIPv4:
+			ethernetPacket, err := repack.EncodeEthernetIPv4Packet(destination, source, vlan, ipContent)
 			if err != nil {
 				log.Printf("[%s] Encoding ethernet IPv4 packet failed: %s", opts.pcapInFile, err)
 				continue
@@ -82,10 +83,19 @@ func main() {
 				continue
 			}
 
-			// TODO: Add case for IPv6
+		case layers.LayerTypeIPv6:
+			ethernetPacket, err := repack.EncodeEthernetIPv6Packet(destination, source, vlan, ipContent)
+			if err != nil {
+				log.Printf("[%s] Encoding ethernet IPv6 packet failed: %s", opts.pcapInFile, err)
+				continue
+			}
+			log.Printf("[%s] Ethernet IPv6 packet size: %d Bytes", opts.pcapInFile, len(ethernetPacket))
+			//log.Printf("[%s] %#v", opts.pcapInFile, ethernetPacket)
 
-		default:
-			log.Printf("[%s] Streaming failed: Unsupported network layer type %s (%d)", opts.pcapInFile, networkLayerType, networkLayerType)
+			if err := stream.WritePacketData(ethernetPacket); err != nil {
+				log.Printf("[%s] Streaming ethernet IPv6 packet to %s failed: %s", opts.pcapInFile, opts.streamingDevice, err)
+				continue
+			}
 		}
 	}
 }
