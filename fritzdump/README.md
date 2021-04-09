@@ -41,6 +41,7 @@ $ ./fritzdump -p 123fritz -i 2-1
 ## About FRITZ!Box interfaces
 Open http://fritz.box/support.lua and navigate to `Paketmitschnitte`.  
 Open browser's developer tools and inspect `Start` buttons value.  
+
 ^Interface^Description^
 |2-0|WAN, but not found with inspect, captures external and internal IPs, but no ethernet layer|
 |2-1|Internetverbindung?|
