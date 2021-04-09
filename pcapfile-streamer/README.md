@@ -49,3 +49,10 @@ sudo tshark -i veth1
 # Stream to veth0
 sudo ./pcapfile-streamer -r ../contrib/small_lo.pcap -i veth0
 ```
+
+## TODOs
+* Fix this:
+```
+2021/04/09 12:16:22.045394 [/tmp/3-17.pcap] Ethernet IPv4 packet size: 1522 Bytes
+2021/04/09 12:16:22.045425 [/tmp/3-17.pcap] Streaming ethernet IPv4 packet to veth0 failed: send: Message too long
+```
