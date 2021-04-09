@@ -43,6 +43,10 @@ sudo ip link add veth0 type veth peer name veth1
 sudo ip link set veth0 up
 sudo ip link set veth1 up
 
+# Try with higher mtu to avoid `Message to long` error
+sudo ip link set veth0 mtu 1522
+sudo ip link set veth1 mtu 1522
+
 # Capture on veth1
 sudo tshark -i veth1
 
