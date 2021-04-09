@@ -37,3 +37,29 @@ Usage of ./fritzdump:
 
 $ ./fritzdump -p 123fritz -i 2-1
 ```
+
+## About FRITZ!Box interfaces
+Open http://fritz.box/support.lua and navigate to `Paketmitschnitte`.  
+Open browser's developer tools and inspect `Start` buttons value.  
+^Interface^Description^
+|2-0|WAN, but not found with inspect, captures external and internal IPs, but no ethernet layer|
+|2-1|Internetverbindung?|
+|3-17|Schnittstelle 0 ('internet')?|
+|3-18|Schnittstelle 1 ('mstv')?|
+|3-0|Routing-Schnittstelle?|
+|1-eoam|eoam?|
+|1-wifi0|wifi0?|
+|1-ing0|ing0?|
+|1-ath0|ath0?|
+|1-lan|lan?|
+|1-eth0|eth0|
+|1-eth1|eth1|
+|1-eth2|eth2|
+|1-eth3|eth3|
+|1-miireg|miireg?|
+|1-wifi1|wifi1?|
+|1-ptm0|ptm0?|
+|4-133|AP (2.4 + 5 GHz, ath0) - Schnittstelle 1?|
+|4-128|WLAN Management Traffic - Schnittstelle 0?|
+|5-161|usb1?|
+|5-162|usb2?|
