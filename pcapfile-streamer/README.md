@@ -49,6 +49,7 @@ sudo ip link set veth1 mtu 1522
 
 # Capture on veth1
 sudo tshark -i veth1
+sudo tshark -i veth1 -F pcap -w /tmp/veth1.pcap
 
 # Stream to veth0
 sudo ./pcapfile-streamer -r ../contrib/small_lo.pcap -i veth0

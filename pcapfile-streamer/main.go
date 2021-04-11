@@ -11,6 +11,7 @@ import (
 	"github.com/mdlayher/ethernet"
 
 	"github.com/eg5846/getting-started-with-pcap/pcapfile-streamer/ethernet/stream"
+	"github.com/eg5846/getting-started-with-pcap/pcapfile-streamer/macid"
 	"github.com/eg5846/getting-started-with-pcap/pcapfile-streamer/pcapfile"
 	"github.com/eg5846/getting-started-with-pcap/pcapfile-streamer/repack"
 )
@@ -33,8 +34,12 @@ func init() {
 }
 
 func main() {
-	destination := []byte{0xbb, 0xbb, 0xbb, 0xbb, 0xbb, 0xbb}
-	source := []byte{0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa}
+	log.Printf("[%s] Generating random MAC id ...", opts.pcapInFile)
+	macId, err := macid.New()
+	if err != nil {
+		log.Fatalf("[%s] Generating random MAC id failed: %s", opts.pcapInFile, err)
+	}
+	log.Printf("[%s] MAC id: %s (dst: %x, src: %x)", opts.pcapInFile, macId.IdString(), macId.Destination(), macId.Source())
 
 	log.Printf("[%s] Starting with VLAN identifier %d ...", opts.pcapInFile, opts.vlanId)
 	vlan := &ethernet.VLAN{
@@ -70,7 +75,7 @@ func main() {
 
 		switch ipLayerType {
 		case layers.LayerTypeIPv4:
-			ethernetPacket, err := repack.EncodeEthernetIPv4Packet(destination, source, vlan, ipContent)
+			ethernetPacket, err := repack.EncodeEthernetIPv4Packet(macId.Destination(), macId.Source(), vlan, ipContent)
 			if err != nil {
 				log.Printf("[%s] Encoding ethernet IPv4 packet failed: %s", opts.pcapInFile, err)
 				continue
@@ -84,7 +89,7 @@ func main() {
 			}
 
 		case layers.LayerTypeIPv6:
-			ethernetPacket, err := repack.EncodeEthernetIPv6Packet(destination, source, vlan, ipContent)
+			ethernetPacket, err := repack.EncodeEthernetIPv6Packet(macId.Destination(), macId.Source(), vlan, ipContent)
 			if err != nil {
 				log.Printf("[%s] Encoding ethernet IPv6 packet failed: %s", opts.pcapInFile, err)
 				continue
@@ -98,4 +103,6 @@ func main() {
 			}
 		}
 	}
+
+	log.Printf("[%s] MAC id: %s (dst: %x, src: %x), VLAN identifier: %d", opts.pcapInFile, macId.IdString(), macId.Destination(), macId.Source(), opts.vlanId)
 }
