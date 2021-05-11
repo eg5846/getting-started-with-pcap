@@ -62,7 +62,15 @@ func main() {
 	}
 	defer reader.Close()
 
-	for packet := range reader.Packets() {
+	linkType := reader.LinkType()
+	log.Printf("[%s] LinkType: %s (%d)", opts.pcapInFile, linkType, linkType)
+
+	packets, err := reader.Packets()
+	if err != nil {
+		log.Fatalf("[%s] Reading packets failed: %s", opts.pcapInFile, err)
+	}
+
+	for packet := range packets {
 		ipContent, ipLayerType, err := repack.ExtractLinkLayerPayload(packet)
 		if err != nil {
 			log.Printf("[%s] Parsing IP content from packet failed: %s", opts.pcapInFile, err)
